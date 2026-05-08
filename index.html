@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melis'e Özel</title>
+    <style>
+        /* TEMEL AYARLAR */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #fff0f3;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .slider {
+            display: flex;
+            width: 300vw; 
+            height: 100vh;
+            transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        section {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* 1. SAYFA: GİRİŞ */
+        .cat-container img {
+            width: 250px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .main-title {
+            font-size: 3rem;
+            color: #c9184a;
+            text-align: center;
+            margin-bottom: 30px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* 2. SAYFA: ZARF VE METİN */
+        .envelope-wrapper {
+            cursor: pointer;
+            transition: transform 0.3s;
+            text-align: center;
+        }
+
+        .envelope-wrapper:hover {
+            transform: scale(1.1);
+        }
+
+        .envelope-icon {
+            font-size: 80px;
+        }
+
+        .text-container {
+            width: 90%;
+            max-width: 600px;
+            height: 350px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            display: none; /* Başta gizli, zarfa tıklayınca açılır */
+            overflow-y: auto; /* Metin uzunsa kaydırılabilir */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        #typewriter {
+            font-size: 1.1rem;
+            color: #590d22;
+            line-height: 1.6;
+            text-align: center;
+            font-weight: 500;
+            white-space: pre-wrap; /* Satır boşluklarını korur */
+        }
+
+        /* 3. SAYFA: KARAR */
+        .question-text {
+            color: #800f2f;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            min-height: 150px;
+            width: 100%;
+        }
+
+        /* GENEL BUTON STİLİ */
+        .btn {
+            background-color: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .btn:hover {
+            background-color: #ff758f;
+        }
+
+        #noBtn {
+            background-color: #adb5bd;
+            position: relative;
+        }
+
+        /* FİNAL EKRANI */
+        #finalOverlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #fff0f3;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .final-heart {
+            font-size: 100px;
+            animation: beat 0.8s infinite;
+        }
+
+        @keyframes beat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slider" id="slider">
+        
+        <!-- 1. SAYFA -->
+        <section>
+            <div class="cat-container">
+                <img src="https://media1.tenor.com/m/99sQqbsDt1kAAAAd/sad.gif" alt="Üzgün Kedi">
+            </div>
+            <h1 class="main-title">Her şey için özür dilerim</h1>
+            <button class="btn" onclick="goToPage(1)">Devam Et >>></button>
+        </section>
+
+        <!-- 2. SAYFA -->
+        <section>
+            <!-- Zarf Simgesi -->
+            <div id="envelope" class="envelope-wrapper" onclick="openEnvelope()">
+                <div class="envelope-icon">✉️</div>
+                <p style="color: #c9184a; font-weight: bold;">Senin için bir mektubum var (Tıkla)</p>
+            </div>
+
+            <!-- Metin Alanı (Başta Gizli) -->
+            <div id="textContainer" class="text-container">
+                <div id="typewriter"></div>
+            </div>
+
+            <div id="actionButtons" style="display:none; gap: 10px;">
+                <button class="btn" id="btnSkipText" style="background-color: #ff758f;" onclick="showFullText()">Tamamını Gör</button>
+                <button class="btn" id="btnNext2" onclick="goToPage(2)">Devam Et >>></button>
+            </div>
+        </section>
+
+        <!-- 3. SAYFA -->
+        <section>
+            <img src="https://i.pinimg.com/originals/0f/a9/a7/0fa9a7e8d9f74c6e99289fa36a9ea441.gif" alt="Affet" style="width: 180px; border-radius: 20px; margin-bottom: 20px;">
+            <div class="question-text">
+                <h2>Beni affediyor musun?</h2>
+                <p>Lütfen kalbinin sesini dinle...</p>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn" id="yesBtn" onclick="showFinal()">Evet</button>
+                <button class="btn" id="noBtn" onmouseover="growYesButton()" onclick="growYesButton()">Hayır</button>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Final Ekranı -->
+    <div id="finalOverlay">
+        <div class="final-heart">❤️</div>
+        <h1 style="color: #ff4d6d; font-size: 3rem; text-align: center;">Biliyordum!<br>Seni çok seviyorum</h1>
+    </div>
+
+    <script>
+        const slider = document.getElementById('slider');
+        const typewriterDiv = document.getElementById('typewriter');
+        const textContainer = document.getElementById('textContainer');
+        const envelope = document.getElementById('envelope');
+        const actionButtons = document.getElementById('actionButtons');
+        const yesBtn = document.getElementById('yesBtn');
+
+        // --- ÖZÜR METNİNİ BURADAN DÜZENLEYEBİLİRSİN ---
+        const fullText = "Her şey için çok özür dilerim... \n\nBiliyorum, bazen hatalar yapıyorum ve bu hatalar seni kırabiliyor. Amacım seni hiçbir zaman üzmek, kırmak veya o güzel gözlerini ağlatmak değildi. Dün gece yaşananlar için gerçekten kalpten üzgünüm. Bir anlık düşüncesizlik ile her şeyi zorlaştırdım, biliyorum ve tüm sorumluluğu kabul ediyorum.\n\nKendimi senin için, bizim için düzeltmeye ve daha sabırlı biri olmaya çalışıyorum. Seninle aramızdaki o güzel bağın bozulmasına dayanamam. Sen benim her şeyimsin ve hayatımdaki yerin tarif edilemeyecek kadar büyük. \n\nLütfen bu dargınlığı sonlandıralım ve eskisi gibi birbirimize gülümseyelim. Seni her şeyden çok seviyorum ve senin için her şeyi yapmaya hazırım. Umarım bu küçük mektup kalbine ulaşır ve beni affedebilirsin...";
+        // ----------------------------------------------
+
+        let isTyping = false;
+        let yesScale = 1;
+
+        function goToPage(pageIndex) {
+            slider.style.transform = `translateX(-${pageIndex * 100}vw)`;
+        }
+
+        function openEnvelope() {
+            envelope.style.display = 'none';
+            textContainer.style.display = 'block';
+            actionButtons.style.display = 'flex';
+            startTypewriter();
+        }
+
+        function startTypewriter() {
+            if (isTyping) return;
+            isTyping = true;
+            let i = 0;
+            typewriterDiv.innerHTML = "";
+            
+            function type() {
+                if (i < fullText.length && isTyping) {
+                    typewriterDiv.innerHTML += fullText.charAt(i);
+                    i++;
+                    // Metin kutusunu otomatik aşağı kaydır
+                    textContainer.scrollTop = textContainer.scrollHeight;
+                    setTimeout(type, 40); 
+                } else {
+                    document.getElementById('btnNext2').style.display = "block";
+                    document.getElementById('btnSkipText').style.display = "none";
+                }
+            }
+            type();
+        }
+
+        function showFullText() {
+            isTyping = false;
+            typewriterDiv.innerHTML = fullText;
+            textContainer.scrollTop = textContainer.scrollHeight;
+            document.getElementById('btnSkipText').style.display = "none";
+            document.getElementById('btnNext2').style.display = "block";
+        }
+
+        function growYesButton() {
+            yesScale += 0.5;
+            yesBtn.style.transform = `scale(${yesScale})`;
+            
+            const noBtn = document.getElementById('noBtn');
+            const x = Math.random() * 100 - 50;
+            const y = Math.random() * 100 - 50;
+            noBtn.style.transform = `translate(${x}px, ${y}px)`;
+        }
+
+        function showFinal() {
+            document.getElementById('finalOverlay').style.display = "flex";
+        }
+    </script>
+</body>
+</html>
